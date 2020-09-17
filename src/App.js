@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Form from './Form'
-import * as Yup from "yup"
 
 function App() {
 
@@ -12,9 +10,16 @@ function App() {
     <div className="App">
       <Form users={users} changeUsers={changeUsers}></Form>
       {
-        users.map(item=>{
-          return(
-          <div>{item.name}, {item.email}, {item.password}, {item.terms}, {item.role}</div>
+        users.map((item, index) => {
+          return (
+            <div>
+              <h2>User {index + 1}</h2>
+              <div>Name: {item.name}<br />
+               Email: {item.email} <br />
+                Password:{item.password} <br />
+                Accepted Terms?: {item.terms ? "Yes" : "No"} <br />
+                Role: {item.role}<br /></div>
+            </div>
           )
         })
       }
