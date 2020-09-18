@@ -1,7 +1,3 @@
-// const { values } = require("cypress/types/lodash")
-
-// const { values } = require("cypress/types/lodash")
-
 describe('Lambda Tests', () => {
 
     const button = () => cy.get('button')
@@ -11,10 +7,9 @@ describe('Lambda Tests', () => {
     })
 
     
-
     // Helper function for all input values
     function valueWorks(toCheck, content) {
-        const item = () => cy.get(toCheck)
+        const item = () => cy.get(`[name="${toCheck}"]`)
 
         button().not('has.disabled')
 
@@ -38,10 +33,7 @@ describe('Lambda Tests', () => {
 
     // Task 1: Name test
     it('Name test', () => {
-        valueWorks('[name=name]', 'Rhea Manuel')
-        // cy.get('[name=name]')
-        //     .type('Rhea Manuel')
-        //     .should('have.value', 'Rhea Manuel')
+        valueWorks('name', 'Rhea Manuel')
     })
 
     // Task 2: Email test
@@ -59,12 +51,12 @@ describe('Lambda Tests', () => {
         button()
             .should('have.disabled')
 
-        valueWorks('[name="email"]', 'working@domain.com')
+        valueWorks('email', 'working@domain.com')
     })
 
     // Task 3 password test
     it('Password test', () => {
-        valueWorks('[name="password"]', 'longpassword')
+        valueWorks("password", 'longpassword')
     })
 
     // Task 4 terms of service test
@@ -85,9 +77,9 @@ describe('Lambda Tests', () => {
 
     // Task 5 submit test
     it('Can Submit', () => {
-        valueWorks('[name=name]', 'Rhea Manuel')
-        valueWorks('[name="email"]', 'working@domain.com')
-        valueWorks('[name="password"]', 'longpassword')
+        valueWorks('name', 'Rhea Manuel')
+        valueWorks("email", 'working@domain.com')
+        valueWorks('password', 'longpassword')
         checkedTest()
         rolesTest('Frontend developer')
 
@@ -98,7 +90,6 @@ describe('Lambda Tests', () => {
     })
 
     // TASK 6: Empty value. Kind of a long-winded way of doing it, but it works. 
-    // Basically: populates every field
     it('Empty value', () => {
 
         // Clicks terms
@@ -108,9 +99,9 @@ describe('Lambda Tests', () => {
         cy.get('[name="role"]').select('Frontend developer')
 
         // Now, array for all the inputs
-        const name = { toCheck: '[name="name"]', content: 'Rhea Manuel' }
-        const email = { toCheck: '[name="email"]', content: 'working@domain.com' }
-        const password = { toCheck: '[name="password"]', content: 'longpassword' }
+        const name = { toCheck: 'name', content: 'Rhea Manuel' }
+        const email = { toCheck: 'email', content: 'working@domain.com' }
+        const password = { toCheck: "password", content: 'longpassword' }
 
         const toTest = [name, email, password]
 
@@ -122,7 +113,7 @@ describe('Lambda Tests', () => {
 
             // Clears the form for the next round
             toClear.forEach((item)=>{
-                cy.get(item).clear()
+                cy.get(`[name="${item}"]`).clear()
             })
 
             // For every input that ISNT currently being checked for blank input, populates it with verifiably valid data
@@ -137,7 +128,6 @@ describe('Lambda Tests', () => {
 
             }
 
-            // cy.log(toTest[i].toCheck)
             // makes sure the button is disabled.
             button().should('has.disabled')
 
