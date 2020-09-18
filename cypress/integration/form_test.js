@@ -1,3 +1,4 @@
+// const { values } = require("cypress/types/lodash")
 
 describe('Lambda Tests', () => {
 
@@ -7,49 +8,74 @@ describe('Lambda Tests', () => {
         cy.visit('http://localhost:3000/')
     })
 
-    context('All tests', () => {
+    function valueWorks(toCheck, content) {
+        const item = () => cy.get(toCheck)
 
-        it('Name test', () => {
-            cy.get('[name=name]')
-                .type('Rhea Manuel')
-                .should('have.value', 'Rhea Manuel')
-        })
+        item()
+            .type(content)
+            .should('have.value', content)
+    }
 
-        it('Email test', () => {
-            cy.get('[name="email"]')
-                .type('email@domain.com')
-                .should('have.value', 'email@domain.com')
-                .clear()
-                .type('Not an email')
+    function checkedTest(){
+        cy.get('[name="terms"]')
+        .not('have.checked')
+        .click()
+        .should('have.checked')
+    }
 
-            button()
-                .should('have.disabled', false)
-        })
+    function rolesTest(toSelect){
+        cy.get('[name="role"]').select(toSelect)
+    }
 
-        it('Password test', () => {
-            cy.get('[name="password"]')
-                .type('short')
-                .should('have.value', 'short')
-            button()
-                .should('have.disabled', false)
-        })
-
-        it('Terms of Service Test', () => {
-            cy.get('[name="terms"]')
-                .click()
-                .should('have.checked')
-                .click()
-                .not('have.checked')
-        })
-
-        it('Can Submit', () => {
-            cy.get('[name"name"]')
-                .type('Rhea Manuel')
-
-            cy.get('[name="email"]')
-                .type('validemail@domain.com')
-
-            cy.get('[name=""]')
-        })
+    it('Name test', () => {
+        valueWorks('[name=name]', 'Rhea Manuel')
+        // cy.get('[name=name]')
+        //     .type('Rhea Manuel')
+        //     .should('have.value', 'Rhea Manuel')
     })
+
+    it('Email test', () => {
+        const email = () => cy.get('[name="email"]')
+
+        email()
+            .type('Not an email')
+
+        button()
+            .should('have.disabled')
+
+        email().clear()
+
+        valueWorks('[name="email"]', 'working@domain.com')
+    })
+
+    it('Password test', () => {
+        valueWorks('[name="password"]', 'longpassword')
+    })
+
+    it('Terms of Service Test', () => {
+        checkedTest()
+
+    })
+
+    it('Roles test', () => {
+        const allRoles = ['Frontend developer', 'Backend devloper', 'Designer']
+
+        for (let i = 0; i < allRoles.length; i++) {
+            rolesTest(allRoles[i])
+        }
+    })
+
+    it('Can Submit', () => {
+        valueWorks('[name=name]', 'Rhea Manuel')
+        valueWorks('[name="email"]', 'working@domain.com')
+        valueWorks('[name="password"]', 'longpassword')
+        checkedTest()
+        rolesTest('Frontend developer')
+
+        button()
+        .not('have.disabled')
+        .click()
+    
+    })
+
 })
